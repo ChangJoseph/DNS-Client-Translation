@@ -46,8 +46,8 @@ class Record:
         self.answer_rdlength = answer_rdlength
         self.answer_rdata = answer_rdata
 
-print("Contacting DNS server..")
 
+print("Contacting DNS server..")
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # initializing socket as UDP (DGRAM)
 udp_socket.settimeout(1)
 udp_host = socket.gethostname() # client hostname
@@ -56,9 +56,12 @@ udp_port = 53 # DNS Server port is 53
 print("client hostname:",udp_host)
 print("socket server hostname:",udp_server)
 print("socket port:",udp_port)
+
+
 start_time = time.time() # setting start time
 while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND less than 5 seconds elapsed
     attempts += 1
+    
     print("Sending DNS query..:",attempts)
     try:
         udp_socket.sendto(message, (udp_server, udp_port)) # sends a message to specified server hostname and port
