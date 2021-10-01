@@ -125,7 +125,20 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         data, udp_server = udp_socket.recvfrom(udp_port) # receive message from port
         print("DNS response received (attempt",attempts,"of 3)")
         print("Processing DNS response..")
-        header_id = data # TODO bitwise every header field
+        header_id = data[0:2]
+        header_qr = data[2:3]
+        header_opcode = data[3:7]
+        header_aa = data[7:8]
+        header_tc = data[8:9]
+        header_rd = data[9:10]
+        header_ra = data[10:11]
+        header_z = data[11:14]
+        header_rcode = data[14:18]
+        header_qdcount = data[18:24]
+        header_ancount = data[24:40]
+        header_nscount = data[40:56]
+        header_arcount = data[56:72]
+
         print("----------------------------------------------------------------------------")
         print("header.ID =",header_id)
         print("header.QR =",header_qr)
