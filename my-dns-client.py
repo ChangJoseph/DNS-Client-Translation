@@ -2,7 +2,7 @@ import sys
 import time
 import socket
 
-hostname = sys.argv[1] # hostname argument given by command line
+cli_hostname = sys.argv[1] # hostname argument given by command line
 message = b"" # the message to send through socket
 data = b"" # the message to receive from socket
 start_time = 0.0 # start time from beginning of socket send attempts
@@ -36,22 +36,24 @@ print("Contacting DNS server..")
 
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # initializing socket as UDP (DGRAM)
 udp_host = socket.gethostname() # client hostname
-server = "8.8.8.8" 
+udp_server = cli_hostname # server socket will attempt to connect to
 udp_port = 53 # DNS Server port is 53
-print("socket hostname:",udp_host)
+print("client hostname:",udp_host)
+print("socket server hostname:",udp_server)
 print("socket port:",udp_port)
 start_time = time.time() # setting start time
 while (attempts <= 3 and time.time() < start_time+5): # within 3 attempts AND less than 5 seconds elapsed
     attempts += 1
     print("Sending DNS query..:",attempts)
     try:
-        udp_socket.sendto(message, (udp_host, udp_port))
+        udp_socket.sendto(message, (server, udp_port))
     except socket.error as err:
         print("Remote host rejected connection:",err)
     try:
-        data, server = udp_socket.recvfrom(53)
+        data, udp_server = udp_socket.recvfrom(53)
         print("DNS response received (attempt",attempts,"of 3)")
         print("Processing DNS resopnse..")
+        header_id = data # TODO bitwise every header field
         print("----------------------------------------------------------------------------")
         print("header.ID =",header_id)
         print("header.QR =",header_qr)
