@@ -3,8 +3,8 @@ import time
 import socket
 
 cli_hostname = sys.argv[1] # hostname argument given by command line
-message = b"" # the message to send through socket
-data = b"" # the message to receive from socket
+message = 0 # the message to send through socket
+data = 0 # the message to receive from socket
 start_time = 0.0 # start time from beginning of socket send attempts
 attempts = 0 # number of times attempted to send message through socket
 
@@ -12,32 +12,73 @@ attempts = 0 # number of times attempted to send message through socket
 print("Preparing DNS query..")
 
 # Header Fields
-header_id = None
-header_qr = None
-header_opcode = None
-header_aa = None
-header_tc = None
-header_rd = None
-header_ra = None
-header_z = None
-header_rcode = None
-header_qdcount = None
-header_ancount = None
-header_nscount = None
-header_arcount = None
+header_id = 1 # start with id 0: 16 bits
+message |= header_id
+header_qr = 0 # 1 bit: 0 = query; 1 = response
+message << 1
+message |= header_qr
+header_opcode = 0 # 0 for standard: 4 bit
+message << 4
+message |= header_opcode
+header_aa = 0 # authoritative answer: 1 bit
+message << 1
+message |= header_aa
+header_tc = 0 # truncation due to long message: 1 bit
+message << 1
+message |= header_tc
+header_rd = 0 # recursion desired: 1 bit
+message << 1
+message |= header_rd
+header_ra = 0 # recursion available: 1 bit
+message << 1
+message |= header_ra
+header_z = 0 # 3 bit nothing
+message << 3
+message |= header_qr
+header_rcode = 0 # response code: 4 bit
+message << 4
+message |= header_rcode
+header_qdcount = 1 # number of question entries
+message << 16
+message |= header_qdcount
+header_ancount = 0 # number of RR in answer section
+message << 16
+message |= header_ancount
+header_nscount = 0 # number of NS RR in authority records section
+message << 16
+message |= header_nscount
+header_arcount = 0 # number of RR in additional records section
+message << 16
+message |= header_arcount
 
 # Question Fields
-question_qname = None
-question_qtype = None
-question_qclass = None
+# QNAME tokenizing + parsing
+hostname_split = cli_hostname.split(".")
+for i in len(hostname_split):
+    message << 8
+    message |= len(hostname_split[i])
+    
+    for j in len(hostname_split[i]):
+        message << 8
+        message |= ord(hostname_split[i][j]) # ascii value of character
+            
+    message << 8 # a 0 byte shows that message reached the end of QNAME
+
+question_qtype = 1
+message << 16
+message |= question_qtype
+question_qclass = 0
+message << 16
+message |= question_qclass
+
 
 # DNS Responses
-answer_name = None
-answer_type = None
-answer_class = None
-answer_ttl = None
-answer_rdlength = None
-answer_rdata = None
+answer_name = 0
+answer_type = 0
+answer_class = 0
+answer_ttl = 0
+answer_rdlength = 0
+answer_rdata = 0
 
 print("Contacting DNS server..")
 
