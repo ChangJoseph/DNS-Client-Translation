@@ -154,6 +154,8 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
 
         # TODO include authority and additional RRs received
 
+        break
+
     except socket.timeout as err:
         print("DNS query timed out")
     except socket.error as err:
