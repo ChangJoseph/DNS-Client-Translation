@@ -4,7 +4,6 @@ import socket
 
 cli_hostname = sys.argv[1] # hostname argument given by command line
 message = [] # the message to send through socket
-message_size = 0 # size of message in bits
 data = 0 # the message to receive from socket
 start_time = 0.0 # start time from beginning of socket send attempts
 attempts = 0 # number of times attempted to send message through socket
@@ -43,22 +42,17 @@ message.append(0x0)
 # QNAME tokenizing + parsing
 hostname_split = cli_hostname.split(".")
 for i in hostname_split:
-    message_size += 8
     message.append(len(i))
     
     for j in i:
-        message_size += 8
         message.append(ord(j)) # ascii value of character
             
     message.append(0x0) # a 0 byte shows that message reached the end of QNAME
-    message_size += 8
 
 question_qtype = 1
-message_size += 16
 message.append(0x0)
 message.append(0x1)
 question_qclass = 0
-message_size += 16
 message.append(0x0)
 message.append(0x1)
 
