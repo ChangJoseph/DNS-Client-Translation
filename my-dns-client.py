@@ -31,6 +31,13 @@ question_qname = None
 question_qtype = None
 question_qclass = None
 
+# DNS Responses
+answer_name = None
+answer_type = None
+answer_class = None
+answer_ttl = None
+answer_rdlength = None
+answer_rdata = None
 
 print("Contacting DNS server..")
 
@@ -57,6 +64,29 @@ while (attempts <= 3 and time.time() < start_time+5): # within 3 attempts AND le
         print("----------------------------------------------------------------------------")
         print("header.ID =",header_id)
         print("header.QR =",header_qr)
+        print("header.OPCODE =",header_opcode)
+        print("header.AA =",header_aa)
+        print("header.TC =",header_tc)
+        print("header.RD =",header_rd)
+        print("header.RA =",header_ra)
+        print("header.Z =",header_z)
+        print("header.RCODE =",header_rcode)
+        print("header.QDCOUNT =",header_qdcount)
+        print("header.ANCOUNT =",header_ancount)
+        print("header.NSCOUNT =",header_nscount)
+        print("header.ARCOUNT =",header_arcount)
+
+        print("question.QNAME =",question_qname)
+        print("question.QTYPE =",question_qtype)
+        print("question.QCLASS =",question_qclass)
+
+        print("answer.NAME =",answer_name)
+        print("answer.TYPE =",answer_type)
+        print("answer.CLASS =",answer_class)
+        print("answer.TTL =",answer_ttl)
+        print("answer.RDLENGTH =",answer_rdlength)
+        print("answer.RDATA =",answer_rdata)
+
     except socket.timeout as err:
         print("DNS query timed out",err)
     except socket.error as err:
