@@ -58,9 +58,9 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
     except socket.error as err:
         print("Remote host rejected connection:",err)
     
-    
+
     try:
-        data, udp_server = udp_socket.recvfrom(53) # receive message from port
+        data, udp_server = udp_socket.recvfrom(udp_port) # receive message from port
         print("DNS response received (attempt",attempts,"of 3)")
         print("Processing DNS response..")
         header_id = data # TODO bitwise every header field
@@ -89,6 +89,8 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         print("answer.TTL =",answer_ttl)
         print("answer.RDLENGTH =",answer_rdlength)
         print("answer.RDATA =",answer_rdata)
+
+        # TODO include authority and additional RRs received
 
     except socket.timeout as err:
         print("DNS query timed out",err)
