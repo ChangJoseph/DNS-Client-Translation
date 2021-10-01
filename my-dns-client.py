@@ -126,18 +126,18 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         print("DNS response received (attempt",attempts,"of 3)")
         print("Processing DNS response..")
         header_id = int.from_bytes(data[0:2],'big')
-        header_qr = int.from_bytes(data[2:3],'big')
-        header_opcode = int.from_bytes(data[3:7],'big')
-        header_aa = int.from_bytes(data[7:8],'big')
-        header_tc = int.from_bytes(data[8:9],'big')
-        header_rd = int.from_bytes(data[9:10],'big')
-        header_ra = int.from_bytes(data[10:11],'big')
-        header_z = int.from_bytes(data[11:14],'big')
-        header_rcode = int.from_bytes(data[14:18],'big')
-        header_qdcount = int.from_bytes(data[18:24],'big')
-        header_ancount = int.from_bytes(data[24:40],'big')
-        header_nscount = int.from_bytes(data[40:56],'big')
-        header_arcount = int.from_bytes(data[56:72],'big')
+        header_qr = int.from_bytes(data[2:3],'big') >> 7
+        header_opcode = (int.from_bytes(data[2:3],'big') >> 3) & 15
+        header_aa = (int.from_bytes(data[2:3],'big') >> 2) & 1
+        header_tc = (int.from_bytes(data[2:3],'big') >> 1) & 1
+        header_rd = int.from_bytes(data[3:4],'big') & 1
+        header_ra = int.from_bytes(data[3:4],'big') >> 7
+        header_z = (int.from_bytes(data[3:4],'big') >> 4) & 7
+        header_rcode = int.from_bytes(data[3:4],'big') & 15
+        header_qdcount = int.from_bytes(data[4:6],'big')
+        header_ancount = int.from_bytes(data[6:8],'big')
+        header_nscount = int.from_bytes(data[8:10],'big')
+        header_arcount = int.from_bytes(data[10:12],'big')
 
         print("----------------------------------------------------------------------------")
         print("header.ID =",header_id)
