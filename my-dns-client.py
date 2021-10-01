@@ -27,12 +27,16 @@ header_z = 0 # 3 bit nothing
 header_rcode = 0 # response code: 4 bit
 message.append(0x0)
 header_qdcount = 1 # number of question entries
+message.append(0x0)
 message.append(0x1)
 header_ancount = 0 # number of RR in answer section
 message.append(0x0)
+message.append(0x0)
 header_nscount = 0 # number of NS RR in authority records section
 message.append(0x0)
+message.append(0x0)
 header_arcount = 0 # number of RR in additional records section
+message.append(0x0)
 message.append(0x0)
 
 # Question Fields
