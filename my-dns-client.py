@@ -44,7 +44,10 @@ start_time = time.time() # setting start time
 while (attempts <= 3 and time.time() < start_time+5): # within 3 attempts AND less than 5 seconds elapsed
     attempts += 1
     print("Sending DNS query..:",attempts)
-    udp_socket.sendto(message, (udp_host, udp_port))
+    try:
+        udp_socket.sendto(message, (udp_host, udp_port))
+    except socket.error as err:
+        print("Remote host rejected connection:",err)
     try:
         data, server = udp_socket.recvfrom(53)
         print("DNS response received (attempt",attempts,"of 3)")
@@ -52,7 +55,7 @@ while (attempts <= 3 and time.time() < start_time+5): # within 3 attempts AND le
         print("----------------------------------------------------------------------------")
         print("header.ID =",header_id)
         print("header.QR =",header_qr)
-
-
-    except socket.timeout:
-        print("DNS query failed")
+    except socket.timeout as err:
+        print("DNS query timed out",err)
+    except socket.error as err:
+        print("Socket receive error:",err)
