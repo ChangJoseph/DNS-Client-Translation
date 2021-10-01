@@ -54,13 +54,13 @@ message |= header_arcount
 # Question Fields
 # QNAME tokenizing + parsing
 hostname_split = cli_hostname.split(".")
-for i in len(hostname_split):
+for i in hostname_split:
     message << 8
-    message |= len(hostname_split[i])
+    message |= len(i)
     
-    for j in len(hostname_split[i]):
+    for j in i:
         message << 8
-        message |= ord(hostname_split[i][j]) # ascii value of character
+        message |= ord(j) # ascii value of character
             
     message << 8 # a 0 byte shows that message reached the end of QNAME
 
