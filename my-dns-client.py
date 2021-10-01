@@ -31,7 +31,7 @@ qclass
 
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp_host = socket.gethostname()
-udp_port = 53
+udp_port = 53 # DNS Server port is 53
 print('socket hostname:',udp_host)
 print('socket port:',udp_port)
 start_time = time.time()
