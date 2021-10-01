@@ -5,39 +5,46 @@ import socket
 cli_hostname = sys.argv[1] # hostname argument given by command line
 message = b"" # the message to send through socket
 data = b"" # the message to receive from socket
+static_id = 1;
 start_time = 0.0 # start time from beginning of socket send attempts
 attempts = 0 # number of times attempted to send message through socket
 
 
 print("Preparing DNS query..")
 
-# Header Fields
-header_id = None
-header_qr = None
-header_opcode = None
-header_aa = None
-header_tc = None
-header_rd = None
-header_ra = None
-header_z = None
-header_rcode = None
-header_qdcount = None
-header_ancount = None
-header_nscount = None
-header_arcount = None
+class Header:
+    def __init__(self, header_id, header_qr, header_opcode, header_aa, header_tc, header_rd, header_ra, header_z, header_rcode, header_qdcount, header_ancount, header_nscount, header_arcount):
+        # Header Fields
+        self.header_id = header_id
+        self.header_qr = header_qr
+        self.header_opcode = header_opcode
+        self.header_aa = header_aa
+        self.header_tc = header_tc
+        self.header_rd = header_rd
+        self.header_ra = header_ra
+        self.header_z = header_z
+        self.header_rcode = header_rcode
+        self.header_qdcount = header_qdcount
+        self.header_ancount = header_ancount
+        self.header_nscount = header_nscount
+        self.header_arcount = header_arcount
 
-# Question Fields
-question_qname = None
-question_qtype = None
-question_qclass = None
+class Question:
+    def __init__(self, question_qname, question_qtype, question_qclass):
+        # Question Fields
+        self.question_qname = question_qname
+        self.question_qtype = question_qtype
+        self.question_qclass = question_qclass
 
-# DNS Responses
-answer_name = None
-answer_type = None
-answer_class = None
-answer_ttl = None
-answer_rdlength = None
-answer_rdata = None
+class Record:
+    def __init__(self, answer_name, answer_type, answer_class, answer_ttl, answer_rdlength, answer_rdata):
+        # DNS Responses
+        self.answer_name = answer_name
+        self.answer_type = answer_type
+        self.answer_class = answer_class
+        self.answer_ttl = answer_ttl
+        self.answer_rdlength = answer_rdlength
+        self.answer_rdata = answer_rdata
 
 print("Contacting DNS server..")
 
