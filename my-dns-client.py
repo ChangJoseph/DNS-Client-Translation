@@ -53,7 +53,7 @@ while (attempts <= 3 and time.time() < start_time+5): # within 3 attempts AND le
     attempts += 1
     print("Sending DNS query..:",attempts)
     try:
-        udp_socket.sendto(message, (server, udp_port))
+        udp_socket.sendto(message, (udp_server, udp_port))
     except socket.error as err:
         print("Remote host rejected connection:",err)
     try:
