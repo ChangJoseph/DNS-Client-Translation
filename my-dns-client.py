@@ -2,11 +2,11 @@ import sys
 import time
 import socket
 
-hostname = sys.argv[1]
-message = b""
-start_time = 0
-time = 0 # time in seconds
-attempts = 0
+hostname = sys.argv[1] # hostname argument given by command line
+message = b"" # the message to send through socket
+start_time = 0 # start time of socket send attempts
+time = 0 # time elapsed in seconds
+attempts = 0 # number of times attempted to send message through socket
 
 # Header Fields
 id
@@ -29,8 +29,8 @@ qtype
 qclass
 
 
-udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-udp_host = socket.gethostname()
+udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # initializing socket as UDP (DGRAM)
+udp_host = socket.gethostname() # client hostname
 udp_port = 53 # DNS Server port is 53
 print('socket hostname:',udp_host)
 print('socket port:',udp_port)
