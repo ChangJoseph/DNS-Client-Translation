@@ -42,6 +42,7 @@ answer_rdata = None
 print("Contacting DNS server..")
 
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # initializing socket as UDP (DGRAM)
+udp_socket.settimeout(1)
 udp_host = socket.gethostname() # client hostname
 udp_server = cli_hostname # server socket will attempt to connect to
 udp_port = 53 # DNS Server port is 53
@@ -49,7 +50,7 @@ print("client hostname:",udp_host)
 print("socket server hostname:",udp_server)
 print("socket port:",udp_port)
 start_time = time.time() # setting start time
-while (attempts <= 3 and time.time() < start_time+5): # within 3 attempts AND less than 5 seconds elapsed
+while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND less than 5 seconds elapsed
     attempts += 1
     print("Sending DNS query..:",attempts)
     try:
@@ -59,7 +60,7 @@ while (attempts <= 3 and time.time() < start_time+5): # within 3 attempts AND le
     try:
         data, udp_server = udp_socket.recvfrom(53)
         print("DNS response received (attempt",attempts,"of 3)")
-        print("Processing DNS resopnse..")
+        print("Processing DNS response..")
         header_id = data # TODO bitwise every header field
         print("----------------------------------------------------------------------------")
         print("header.ID =",header_id)
