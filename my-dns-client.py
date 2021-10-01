@@ -3,7 +3,7 @@ import time
 import socket
 
 hostname = sys.argv[1]
-message = ""
+message = b""
 start_time = 0
 time = 0 # time in seconds
 attempts = 0
