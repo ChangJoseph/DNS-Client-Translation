@@ -12,24 +12,24 @@ attempts = 0 # number of times attempted to send message through socket
 print("Preparing DNS query..")
 
 # Header Fields
-id = None
-qr = None
-opcode = None
-aa = None
-tc = None
-rd = None
-ra = None
-z = None
-rcode = None
-qdcount = None
-ancount = None
-nscount = None
-arcount = None
+header_id = None
+header_qr = None
+header_opcode = None
+header_aa = None
+header_tc = None
+header_rd = None
+header_ra = None
+header_z = None
+header_rcode = None
+header_qdcount = None
+header_ancount = None
+header_nscount = None
+header_arcount = None
 
 # Question Fields
-qname = None
-qtype = None
-qclass = None
+question_qname = None
+question_qtype = None
+question_qclass = None
 
 
 print("Contacting DNS server..")
@@ -50,8 +50,8 @@ while (attempts <= 3 and time.time() < start_time+5): # within 3 attempts AND le
         print("DNS response received (attempt",attempts,"of 3)")
         print("Processing DNS resopnse..")
         print("----------------------------------------------------------------------------")
-        print("header.ID =",id)
-        print("header.QR =",qr)
+        print("header.ID =",header_id)
+        print("header.QR =",header_qr)
 
 
     except socket.timeout:
