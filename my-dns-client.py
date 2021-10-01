@@ -125,19 +125,19 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         data, udp_server = udp_socket.recvfrom(udp_port) # receive message from port
         print("DNS response received (attempt",attempts,"of 3)")
         print("Processing DNS response..")
-        header_id = data[0:2]
-        header_qr = data[2:3]
-        header_opcode = data[3:7]
-        header_aa = data[7:8]
-        header_tc = data[8:9]
-        header_rd = data[9:10]
-        header_ra = data[10:11]
-        header_z = data[11:14]
-        header_rcode = data[14:18]
-        header_qdcount = data[18:24]
-        header_ancount = data[24:40]
-        header_nscount = data[40:56]
-        header_arcount = data[56:72]
+        header_id = int.from_bytes(data[0:2],'big')
+        header_qr = int.from_bytes(data[2:3],'big')
+        header_opcode = int.from_bytes(data[3:7],'big')
+        header_aa = int.from_bytes(data[7:8],'big')
+        header_tc = int.from_bytes(data[8:9],'big')
+        header_rd = int.from_bytes(data[9:10],'big')
+        header_ra = int.from_bytes(data[10:11],'big')
+        header_z = int.from_bytes(data[11:14],'big')
+        header_rcode = int.from_bytes(data[14:18],'big')
+        header_qdcount = int.from_bytes(data[18:24],'big')
+        header_ancount = int.from_bytes(data[24:40],'big')
+        header_nscount = int.from_bytes(data[40:56],'big')
+        header_arcount = int.from_bytes(data[56:72],'big')
 
         print("----------------------------------------------------------------------------")
         print("header.ID =",header_id)
