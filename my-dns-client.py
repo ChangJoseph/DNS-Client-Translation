@@ -164,6 +164,7 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         print("answer.TTL =",answer_ttl)
         print("answer.RDLENGTH =",answer_rdlength)
         print("answer.RDATA =",answer_rdata)
+        print("----------------------------------------------------------------------------")
 
         # TODO include authority and additional RRs received
 
