@@ -47,7 +47,7 @@ for i in hostname_split:
     for j in i:
         message.append(ord(j)) # ascii value of character
             
-    message.append(0x0) # a 0 byte shows that message reached the end of QNAME
+message.append(0x0) # a 0 byte shows that message reached the end of QNAME
 
 question_qtype = 1
 message.append(0x0)
@@ -55,9 +55,6 @@ message.append(0x1)
 question_qclass = 0
 message.append(0x0)
 message.append(0x1)
-
-print(message)
-
 
 # DNS Responses
 answer_name = 0
