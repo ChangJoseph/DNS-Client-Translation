@@ -88,6 +88,7 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         data, udp_server = udp_socket.recvfrom(udp_port) # receive message from port
         print("DNS response received (attempt",attempts,"of 3)")
         print("Processing DNS response..")
+        print(data.decode("ascii"))
         header_id = int.from_bytes(data[0:2],'big')
         header_qr = int.from_bytes(data[2:3],'big') >> 7
         header_opcode = (int.from_bytes(data[2:3],'big') >> 3) & 15
@@ -117,16 +118,96 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         print("header.NSCOUNT =",header_nscount)
         print("header.ARCOUNT =",header_arcount)
 
-        print("question.QNAME =")
+        offset = 12
+        for i in range(header_qdcount):
+            print("question.QNAME=",int.from_bytes(data[offset:offset+2],'big'))
+            offset += 2
+        question_qtype = int.from_bytes(data[offset:offset+2],'big')
         print("question.QTYPE =",question_qtype)
+        offset += 2
+        question_qclass = int.from_bytes(data[offset:offset+2],'big')
         print("question.QCLASS =",question_qclass)
+        offset += 2
 
-        print("answer.NAME =",answer_name)
-        print("answer.TYPE =",answer_type)
-        print("answer.CLASS =",answer_class)
-        print("answer.TTL =",answer_ttl)
-        print("answer.RDLENGTH =",answer_rdlength)
-        print("answer.RDATA =",answer_rdata)
+        for i in range(header_ancount):
+            while (offset-1 >= len(data) or data[offset] != bytes([0x0])):
+                answer_name += data[offset]
+                offset += 2
+            print("answer.NAME =",answer_name)
+            offset += 2
+
+            answer_type = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.TYPE =",answer_type)
+            offset += 2
+
+            answer_class = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.CLASS =",answer_class)
+            offset += 2
+
+            answer_ttl = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.TTL =",answer_ttl)
+            offset += 2
+
+            answer_rdlength = int.from_bytes(data[offset:offset+4],'big')
+            print("answer.RDLENGTH =",answer_rdlength)
+            offset += 4
+            
+            answer_rdata = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.RDATA =",answer_rdata)
+            offset += 2
+        for i in range(header_nscount):
+            while (data[offset] != bytes([0x0])):
+                answer_name += data[offset].decode('ascii')
+                offset += 2
+            print("answer.NAME =",answer_name)
+            offset += 2
+
+            answer_type = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.TYPE =",answer_type)
+            offset += 2
+
+            answer_class = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.CLASS =",answer_class)
+            offset += 2
+
+            answer_ttl = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.TTL =",answer_ttl)
+            offset += 2
+
+            answer_rdlength = int.from_bytes(data[offset:offset+4],'big')
+            print("answer.RDLENGTH =",answer_rdlength)
+            offset += 4
+            
+            answer_rdata = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.RDATA =",answer_rdata)
+            offset += 2
+        for i in range(header_arcount):
+            while (data[offset] != bytes([0x0])):
+                answer_name += data[offset].decode('ascii')
+                offset += 2
+            print("answer.NAME =",answer_name)
+            offset += 2
+
+            answer_type = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.TYPE =",answer_type)
+            offset += 2
+
+            answer_class = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.CLASS =",answer_class)
+            offset += 2
+
+            answer_ttl = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.TTL =",answer_ttl)
+            offset += 2
+
+            answer_rdlength = int.from_bytes(data[offset:offset+4],'big')
+            print("answer.RDLENGTH =",answer_rdlength)
+            offset += 4
+            
+            answer_rdata = int.from_bytes(data[offset:offset+2],'big')
+            print("answer.RDATA =",answer_rdata)
+            offset += 2
+
         print("----------------------------------------------------------------------------")
 
         # TODO include authority and additional RRs received
