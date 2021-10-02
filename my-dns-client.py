@@ -130,7 +130,7 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         offset += 2
 
         for i in range(header_ancount):
-            while (offset-1 >= len(data) or data[offset] != bytes([0x0])):
+            if (data[offset] != bytes([0x0])):
                 answer_name += data[offset]
                 offset += 2
             print("answer.NAME =",answer_name)
@@ -156,7 +156,7 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
             print("answer.RDATA =",answer_rdata)
             offset += 2
         for i in range(header_nscount):
-            while (data[offset] != bytes([0x0])):
+            if (data[offset] != bytes([0x0])):
                 answer_name += data[offset].decode('ascii')
                 offset += 2
             print("answer.NAME =",answer_name)
@@ -182,7 +182,7 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
             print("answer.RDATA =",answer_rdata)
             offset += 2
         for i in range(header_arcount):
-            while (data[offset] != bytes([0x0])):
+            if (data[offset] != bytes([0x0])):
                 answer_name += data[offset].decode('ascii')
                 offset += 2
             print("answer.NAME =",answer_name)
