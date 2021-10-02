@@ -39,6 +39,7 @@ for i in hostname_split:
     message += chr(len(i))[2:]
     for j in i:
         message += chr(ord(j))[2:]
+message += "0"
 
 question_qtype = 1
 message += "01"
@@ -71,7 +72,7 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
     attempts += 1
     print("Sending DNS query..:",attempts)
     try:
-        udp_socket.sendto(message.encode(encoding="hex_codec"), (udp_server, udp_port)) # sends a message to specified server hostname and port
+        udp_socket.sendto(bytes.fromhex(message), (udp_server, udp_port)) # sends a message to specified server hostname and port
     except socket.error as err:
         print("Remote host rejected connection:",err)
     
