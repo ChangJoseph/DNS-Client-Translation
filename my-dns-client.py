@@ -69,7 +69,7 @@ print("Contacting DNS server..")
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # initializing socket as UDP (DGRAM)
 udp_socket.settimeout(2)
 udp_host = socket.gethostname() # client hostname
-udp_server = "8.8.4.4" # server socket will attempt to connect to
+udp_server = "8.8.8.8" # server socket will attempt to connect to
 udp_port = 53 # DNS Server port is 
 
 # print("client hostname:",udp_host)
