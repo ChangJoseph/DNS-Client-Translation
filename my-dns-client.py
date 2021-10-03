@@ -129,13 +129,15 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
                     offset += 1
                 qname_response += '.'
             print("question.QNAME=",qname_response[:-1])
-            offset += 2
+            offset += 1
+
         question_qtype = int.from_bytes(data[offset:offset+2],'big')
         print("question.QTYPE =",question_qtype)
         offset += 2
         question_qclass = int.from_bytes(data[offset:offset+2],'big')
         print("question.QCLASS =",question_qclass)
         offset += 2
+
 
         for i in range(header_ancount):
             while (offset >= len(data) or data[offset] != 0x0):
@@ -156,13 +158,14 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
             print("answer.TTL =",answer_ttl)
             offset += 2
 
-            answer_rdlength = int.from_bytes(data[offset:offset+4],'big')
+            answer_rdlength = int.from_bytes(data[offset:offset+2],'big')
             print("answer.RDLENGTH =",answer_rdlength)
-            offset += 4
+            offset += 2
             
             answer_rdata = int.from_bytes(data[offset:offset+2],'big')
             print("answer.RDATA =",answer_rdata)
             offset += 2
+
         # for i in range(header_nscount):
         #     while (data[offset] != bytes([0x0])):
         #         answer_name += data[offset].decode('ascii')
@@ -189,6 +192,7 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         #     answer_rdata = int.from_bytes(data[offset:offset+2],'big')
         #     print("answer.RDATA =",answer_rdata)
         #     offset += 2
+
         # for i in range(header_arcount):
         #     while (data[offset] != bytes([0x0])):
         #         answer_name += data[offset].decode('ascii')
