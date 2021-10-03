@@ -12,7 +12,7 @@ attempts = 0 # number of times attempted to send message through socket
 print("Preparing DNS query..")
 
 # Header Fields
-header_id = 1 # start with id 0: 16 bits
+header_id = 1 # start with id 1: 16 bits
 message.append(0x0)
 message.append(0x1)
 header_qr = 0 # 1 bit: 0 = query; 1 = response
@@ -52,7 +52,7 @@ message.append(0x0) # a 0 byte shows that message reached the end of QNAME
 question_qtype = 1
 message.append(0x0)
 message.append(0x1)
-question_qclass = 0
+question_qclass = 1 # 0x0001 for Internet Address (IN)
 message.append(0x0)
 message.append(0x1)
 
@@ -71,13 +71,13 @@ udp_socket.settimeout(2)
 udp_host = socket.gethostname() # client hostname
 udp_server = "8.8.8.8" # server socket will attempt to connect to
 udp_port = 53 # DNS Server port is 53
-print("client hostname:",udp_host)
-print("socket server hostname:",udp_server)
-print("socket port:",udp_port)
+# print("client hostname:",udp_host)
+# print("socket server hostname:",udp_server)
+# print("socket port:",udp_port)
 start_time = time.time() # setting start time
 while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND less than 5 seconds elapsed
     attempts += 1
-    print("Sending DNS query..:",attempts)
+    print("Sending DNS query..")
     try:
         udp_socket.sendto(bytes(message), (udp_server, udp_port)) # sends a message to specified server hostname and port
     except socket.error as err:
@@ -119,9 +119,8 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
 
         offset = 12
         for i in range(header_qdcount):
-            if (offset >= len(data)): break
             qname_response = ""
-            while(data[offset]!= 0x0):
+            while(data[offset] != 0x0):
                 letter_count = data[offset]
                 offset += 1
                 for j in range(letter_count):
@@ -140,11 +139,24 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
 
 
         for i in range(header_ancount):
-            while (offset >= len(data) or data[offset] != 0x0):
-                answer_name += data[offset]
-                offset += 2
-            print("answer.NAME =",answer_name)
-            offset += 2
+            # while (offset >= len(data) or data[offset] != 0x0):
+            #     answer_name += data[offset]
+            #     offset += 2
+            # print("answer.NAME =",answer_name)
+            # offset += 2
+            print (data[offset:])
+            print (offset)
+            answer_name = ""
+            while(data[offset] != 0x0):
+                letter_count = data[offset]
+                print("LETTER COUNT:",letter_count)
+                offset += 1
+                for j in range(letter_count):
+                    answer_name += chr(data[offset])
+                    offset += 1
+                answer_name += '.'
+            print("answer.NAME =",answer_name[:-1])
+            offset += 1
 
             answer_type = int.from_bytes(data[offset:offset+2],'big')
             print("answer.TYPE =",answer_type)
@@ -154,17 +166,21 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
             print("answer.CLASS =",answer_class)
             offset += 2
 
-            answer_ttl = int.from_bytes(data[offset:offset+2],'big')
+            answer_ttl = int.from_bytes(data[offset:offset+4],'big')
             print("answer.TTL =",answer_ttl)
-            offset += 2
+            offset += 4
 
             answer_rdlength = int.from_bytes(data[offset:offset+2],'big')
             print("answer.RDLENGTH =",answer_rdlength)
             offset += 2
             
-            answer_rdata = int.from_bytes(data[offset:offset+2],'big')
+            answer_rdata = ""
+            answer_rdata += data[offset] + "."
+            answer_rdata += data[offset+1] + "."
+            answer_rdata += data[offset+2] + "."
+            answer_rdata += data[offset+3] + "."
             print("answer.RDATA =",answer_rdata)
-            offset += 2
+            offset += 4
 
         # for i in range(header_nscount):
         #     while (data[offset] != bytes([0x0])):
