@@ -88,6 +88,8 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         data, udp_server = udp_socket.recvfrom(udp_port) # receive message from port
         print("DNS response received (attempt",attempts,"of 3)")
         print("Processing DNS response..")
+        print("----------------------------------------------------------------------------")
+        
         header_id = int.from_bytes(data[0:2],'big')
         header_qr = int.from_bytes(data[2:3],'big') >> 7
         header_opcode = (int.from_bytes(data[2:3],'big') >> 3) & 15
@@ -102,7 +104,6 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         header_nscount = int.from_bytes(data[8:10],'big')
         header_arcount = int.from_bytes(data[10:12],'big')
 
-        print("----------------------------------------------------------------------------")
         print("header.ID =",header_id)
         print("header.QR =",header_qr)
         print("header.OPCODE =",header_opcode)
@@ -117,8 +118,8 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         print("header.NSCOUNT =",header_nscount)
         print("header.ARCOUNT =",header_arcount)
 
-        offset = 12
-        for i in range(header_qdcount):
+        offset = 12 # Header is 12 bytes
+        for i in range(header_qdcount): # Question section
             qname_response = ""
             while(data[offset] != 0x0):
                 letter_count = data[offset]
@@ -138,7 +139,7 @@ while (attempts < 3 and time.time() < start_time+5): # within 3 attempts AND les
         offset += 2
 
 
-        for i in range(header_ancount):
+        for i in range(header_ancount): # Answer Section
             # while (offset >= len(data) or data[offset] != 0x0):
             #     answer_name += data[offset]
             #     offset += 2
